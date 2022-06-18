@@ -45,13 +45,6 @@ async def on_raw_reaction_add(payload: discord.RawReactionActionEvent):
         await message.reply(msg)
     return
 
-# Display lexicon of emojis used on the server and their meaning - based on Pyrope's original message
-@hoot_bot.command(name='lexicon', help='Display legend of the different emojis used around the Hoot server.')
-async def display_help(ctx):
-    gen_channel = ctx.guild.get_channel(847457155220242434)
-    lex_msg = await gen_channel.fetch_message(847535432488452188)
-    await ctx.channel.send(lex_msg.content)
-
 @hoot_bot.event
 async def on_disconnect():
     private_channel = discord.utils.get()
