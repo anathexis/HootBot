@@ -6,7 +6,7 @@ from typing import List
 
 class SentenceGeneratorBase(metaclass=ABCMeta):
     @abstractmethod
-    def draw_sentence(self) -> str:
+    def draw_sentence(self, message: str) -> str:
         pass
 
 class TextFileSentenceGenerator(SentenceGeneratorBase):
