@@ -1,3 +1,4 @@
+from calendar import c
 from random import seed, choice, randint
 from typing import List
 
@@ -22,6 +23,11 @@ class Die():
 
 class Cast():
     @staticmethod
+    def get_cast_from_ndn_string(ndn_string: str) -> 'Cast':
+        dice_number, dice_faces = map(int, ndn_string.split('d'))
+        return Cast(dice_number, dice=Die(dice_faces))
+
+    @staticmethod
     def get_random_cast(min_number_of_dice=4, max_number_of_dice=16, min_number_of_faces:int=0, max_number_of_faces:int=500):
         return Cast(
                 # Choose a random number of dices
@@ -33,6 +39,7 @@ class Cast():
     def __init__(self, dice_number: int, dice: Die):
         self.dice_number = dice_number
         self.dice = dice
+        self.current_throw: List[int] = []
 
     def __repr__(self) -> str:
         return f'<Cast {self.dice_number} Dice {self.dice.faces}>'
@@ -41,7 +48,13 @@ class Cast():
         return f'{self.dice_number}{self.dice}'
 
     def throw(self) -> List[int]:
-        return [self.dice.roll() for roll in range(self.dice_number)]
+        self.current_throw = [self.dice.roll() for roll in range(self.dice_number)]
+        return self.current_throw
     
     def get_thrown_sum(self) -> int:
-        return sum(self.throw())
+        self.throw()
+        return sum(self.current_throw)
+
+if __name__ == '__main__':
+    cast = Cast.get_cast_from_ndn_string('carrots')
+    print(cast.get_thrown_sum())

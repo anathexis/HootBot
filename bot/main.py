@@ -49,6 +49,14 @@ async def on_raw_reaction_add(payload: discord.RawReactionActionEvent):
 async def on_disconnect():
     private_channel = discord.utils.get()
 
+@hoot_bot.command()
+async def roll(ctx, ndn_dice_string: str):
+    try:
+        cast = Cast.get_cast_from_ndn_string(ndn_dice_string)
+    except ValueError:
+        await ctx.send('Bad format, should be ndn, eg: 4d6')
+
+    await ctx.send(f'Result for {ndn_dice_string}: {cast.get_thrown_sum()} ({", ".join(map(str, cast.current_throw))})')
 
 hoot_bot.run(os.getenv('DISCORD_TOKEN'))
 
