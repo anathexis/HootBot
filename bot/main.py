@@ -60,6 +60,8 @@ async def roll(ctx, ndn_dice_string: str):
 
 @hoot_bot.command()
 async def target_san(ctx, ndn_dice_string: str):
+    if ctx.message.reference is None:
+        return
     message = await ctx.channel.fetch_message(ctx.message.reference.message_id)
         
     sender = message.author.mention
