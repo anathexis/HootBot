@@ -58,6 +58,20 @@ async def roll(ctx, ndn_dice_string: str):
 
     await ctx.send(f'Result for {ndn_dice_string}: {cast.get_thrown_sum()} ({", ".join(map(str, cast.current_throw))})')
 
+@hoot_bot.command()
+async def target_san(ctx, ndn_dice_string: str):
+    if ctx.message.reference is None:
+        await ctx.send('No target, please reply to a message to target a loss of SAN.')
+
+    message_sender = await ctx.channel.fetch_message(ctx.message.reference.message_id).author.mention
+
+    try:
+        cast = Cast.get_cast_from_ndn_string(ndn_dice_string)
+    except ValueError:
+        await ctx.send('Bad format, should be ndn, eg: 4d6') 
+
+    await ctx.send(f'{message_sender}, you loose {cast.get_thrown_sum()} ({ndn_dice_string}) points of SAN. Courtesy of {ctx.author.display_name}')
+
 hoot_bot.run(os.getenv('DISCORD_TOKEN'))
 
 
