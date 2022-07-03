@@ -74,6 +74,12 @@ async def target_san(ctx, ndn_dice_string: str):
 
     await ctx.send(f'{sender}, you loose {cast.get_thrown_sum()} ({ndn_dice_string}) points of SAN. Courtesy of {ctx.author.display_name}.')
 
+
+@hoot_bot.event
+async def on_command_error(ctx, error):
+    if isinstance(error, commands.MissingRequiredArgument) and "ndn_dice_string is a required argument that is missing" in str(error):
+        await ctx.send("You're missing a required argument: the dice to be thrown.")
+
 hoot_bot.run(os.getenv('DISCORD_TOKEN'))
 
 
