@@ -60,25 +60,24 @@ async def roll(ctx, ndn_dice_string: str):
 
 @hoot_bot.command()
 async def target_san(ctx, ndn_dice_string: str):
-    if ctx.message.reference is None:
-        await ctx.send('No target, please reply to a message to target a loss of SAN.')
-    else:
-        message = await ctx.channel.fetch_message(ctx.message.reference.message_id)
+    message = await ctx.channel.fetch_message(ctx.message.reference.message_id)
         
-        sender = message.author.mention
+    sender = message.author.mention
 
-        try:
-            cast = Cast.get_cast_from_ndn_string(ndn_dice_string)
-        except ValueError:
-            await ctx.send('Bad format, should be ndn, eg: 4d6') 
+    try:
+        cast = Cast.get_cast_from_ndn_string(ndn_dice_string)
+    except ValueError:
+        await ctx.send('Bad format, should be ndn, eg: 4d6') 
 
-        await ctx.send(f'{sender}, you loose {cast.get_thrown_sum()} ({ndn_dice_string}) points of SAN. Courtesy of {ctx.author.display_name}.')
+    await ctx.send(f'{sender}, you loose {cast.get_thrown_sum()} ({ndn_dice_string}) points of SAN. Courtesy of {ctx.author.display_name}.')
 
 
 @hoot_bot.event
 async def on_command_error(ctx, error):
     if isinstance(error, commands.MissingRequiredArgument) and "ndn_dice_string is a required argument that is missing" in str(error):
         await ctx.send("You're missing a required argument: the dice to be thrown.")
+    if isinstance(error, commands.errors.CommandInvokeError) and "Command raised an exception: AttributeError: 'NoneType' object has no attribute 'message_id'" in str(error):
+        await ctx.send("No target, please reply to a message to target a loss of SAN.")
 
 hoot_bot.run(os.getenv('DISCORD_TOKEN'))
 
