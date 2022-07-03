@@ -63,7 +63,9 @@ async def target_san(ctx, ndn_dice_string: str):
     if ctx.message.reference is None:
         await ctx.send('No target, please reply to a message to target a loss of SAN.')
 
-    message_sender = await ctx.channel.fetch_message(ctx.message.reference.message_id).author.mention
+    message = await ctx.channel.fetch_message(ctx.message.reference.message_id)
+    
+    sender = message.author.mention
 
     try:
         cast = Cast.get_cast_from_ndn_string(ndn_dice_string)
