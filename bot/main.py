@@ -76,7 +76,7 @@ async def target_san(ctx, ndn_dice_string: str):
 async def on_command_error(ctx, error):
     if isinstance(error, commands.MissingRequiredArgument) and "ndn_dice_string is a required argument that is missing" in str(error):
         await ctx.send("You're missing a required argument: the dice to be thrown.")
-    if isinstance(error, commands.errors.CommandInvokeError) and "Command raised an exception: AttributeError" in str(error):
+    if isinstance(error, commands.CommandInvokeError) and "Command raised an exception: AttributeError" in str(error):
         await ctx.send("No target, please reply to a message to target a loss of SAN.")
 
 hoot_bot.run(os.getenv('DISCORD_TOKEN'))
