@@ -35,7 +35,7 @@ class Cast():
         self.dice = dice
 
     def __repr__(self) -> str:
-        return f'<Cast {self.dice_number} Dice {self.faces}>'
+        return f'<Cast {self.dice_number} Dice {self.dice.faces}>'
 
     def __str__(self) -> str:
         return f'{self.dice_number}{self.dice}'
