@@ -72,7 +72,7 @@ async def target_san(ctx, ndn_dice_string: str):
     except ValueError:
         await ctx.send('Bad format, should be ndn, eg: 4d6') 
 
-    await ctx.send(f'{sender}, you loose {cast.get_thrown_sum()} ({ndn_dice_string}) points of SAN. Courtesy of {ctx.author.display_name}')
+    await ctx.send(f'{sender}, you loose {cast.get_thrown_sum()} ({ndn_dice_string}) points of SAN. Courtesy of {ctx.author.display_name}.')
 
 hoot_bot.run(os.getenv('DISCORD_TOKEN'))
 
