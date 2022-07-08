@@ -4,6 +4,7 @@ from sentence_generator import SentenceGenerator, TextFileSentenceGenerator
 from pathlib import Path
 import random
 from scipy.stats import logistic
+from typing import List
 
 # imports of the discord libs
 import discord
