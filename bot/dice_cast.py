@@ -55,6 +55,10 @@ class Cast():
         self.throw()
         return sum(self.current_throw)
 
+    @property
+    def bounds(self):
+        return (self.dice_number, self.dice_number * self.dice.faces)
+
 if __name__ == '__main__':
     cast = Cast.get_cast_from_ndn_string('carrots')
     print(cast.get_thrown_sum())

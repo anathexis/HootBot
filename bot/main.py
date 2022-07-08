@@ -2,6 +2,8 @@
 from dice_cast import Cast
 from sentence_generator import SentenceGenerator, TextFileSentenceGenerator
 from pathlib import Path
+import random
+from scipy.stats import logistic
 
 # imports of the discord libs
 import discord
@@ -60,9 +62,10 @@ async def roll(ctx, ndn_dice_string: str):
 
 @hoot_bot.command()
 async def target_san(ctx, ndn_dice_string: str):
-    if ctx.message.reference is None:
+    if ctx.message.reference is not None:
+        message = await ctx.channel.fetch_message(ctx.message.reference.message_id)
+    else:
         await ctx.send("No target, please reply to a message to target a loss of SAN.")
-    message = await ctx.channel.fetch_message(ctx.message.reference.message_id)
         
     sender = message.author.mention
 
@@ -71,7 +74,14 @@ async def target_san(ctx, ndn_dice_string: str):
     except ValueError:
         await ctx.send('Bad format, should be ndn, eg: 4d6') 
 
-    await ctx.send(f'{sender}, you loose {cast.get_thrown_sum()} ({ndn_dice_string}) points of SAN. Courtesy of {ctx.author.display_name}.')
+    sentence = ''
+    
+    if cast.bounds[1] > 1000 and random.random() > logistic.cdf(cast.bounds[1], 2000, 500):
+        sentence = f'{ctx.author.mention}, abusing the hoot-bot (well, actually, me), make you loose {cast.get_thrown_sum()}. You know why.'
+    else:
+        sentence = f'{sender}, you loose {cast.get_thrown_sum()} ({ndn_dice_string}) points of SAN. Courtesy of {ctx.author.display_name}.'
+
+    await ctx.send(sentence)
 
 
 @hoot_bot.event
@@ -82,6 +92,7 @@ async def on_command_error(ctx, error):
         await ctx.send("No target, please reply to a message to target a loss of SAN.")
 
 hoot_bot.run(os.getenv('DISCORD_TOKEN'))
+
 
 
 
