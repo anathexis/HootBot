@@ -4,7 +4,6 @@ from sentence_generator import SentenceGenerator, TextFileSentenceGenerator
 from pathlib import Path
 import random
 from scipy.stats import logistic
-from typing import List
 
 # imports of the discord libs
 import discord
@@ -62,7 +61,7 @@ async def roll(ctx, ndn_dice_string: str):
     await ctx.send(f'Result for {ndn_dice_string}: {cast.get_thrown_sum()} ({", ".join(map(str, cast.current_throw))})')
 
 @hoot_bot.command()
-async def target_san(ctx, *ndn_dice_string: List[str]):
+async def target_san(ctx, ndn_dice_string: str):
     if ctx.message.reference is not None:
         message = await ctx.channel.fetch_message(ctx.message.reference.message_id)
     else:
@@ -71,20 +70,17 @@ async def target_san(ctx, *ndn_dice_string: List[str]):
     sender = message.author.mention
 
     try:
-        cast = Cast.get_cast_from_ndn_string(ndn_dice_string[0])
+        cast = Cast.get_cast_from_ndn_string(ndn_dice_string)
     except ValueError:
         await ctx.send('Bad format, should be ndn, eg: 4d6') 
 
     sentence = ''
     
-    # In order to prevent abuse in using the hoot-bot target_san function.
+    # In order to prevent abuse in using the hoot-bot target_san
     if cast.bounds[1] > 1000 and random.random() < logistic.cdf(cast.bounds[1], 2000, 500):
         sentence = f'{ctx.author.mention}, abusing the hoot-bot (well, actually, me), make you loose {cast.get_thrown_sum()}. You know why.'
     else:
-        justification = '.'
-        if len(ndn_dice_string) > 1:
-            justification = ', ' + ' '.join(ndn_dice_string[1:])
-        sentence = f'{sender}, you loose {cast.get_thrown_sum()} ({ndn_dice_string}) points of SAN. Courtesy of {ctx.author.display_name}{justification}'
+        sentence = f'{sender}, you loose {cast.get_thrown_sum()} ({ndn_dice_string}) points of SAN. Courtesy of {ctx.author.display_name}.'
 
     await ctx.send(sentence)
 
