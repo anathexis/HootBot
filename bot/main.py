@@ -69,17 +69,23 @@ async def target_san(ctx, ndn_dice_string: str):
         
     sender = message.author.mention
 
+    command_list = ndn_dice_string.split()
+
     try:
-        cast = Cast.get_cast_from_ndn_string(ndn_dice_string)
+        cast = Cast.get_cast_from_ndn_string(command_list.pop())
     except ValueError:
         await ctx.send('Bad format, should be ndn, eg: 4d6') 
 
     sentence = ''
     
+    # In order to prevent abuse in using the hoot-bot target_san function.
     if cast.bounds[1] > 1000 and random.random() < logistic.cdf(cast.bounds[1], 2000, 500):
         sentence = f'{ctx.author.mention}, abusing the hoot-bot (well, actually, me), make you loose {cast.get_thrown_sum()}. You know why.'
     else:
-        sentence = f'{sender}, you loose {cast.get_thrown_sum()} ({ndn_dice_string}) points of SAN. Courtesy of {ctx.author.display_name}.'
+        justification = '.'
+        if len(command_list):
+            justification = ', ' + ' '.join(command_list)
+        sentence = f'{sender}, you loose {cast.get_thrown_sum()} ({ndn_dice_string}) points of SAN. Courtesy of {ctx.author.display_name}{justification}'
 
     await ctx.send(sentence)
 
