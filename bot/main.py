@@ -61,7 +61,7 @@ async def roll(ctx, ndn_dice_string: str):
     await ctx.send(f'Result for {ndn_dice_string}: {cast.get_thrown_sum()} ({", ".join(map(str, cast.current_throw))})')
 
 @hoot_bot.command()
-async def target_san(ctx, ndn_dice_string: str):
+async def target_san(ctx, *ndn_dice_string: List[str]):
     if ctx.message.reference is not None:
         message = await ctx.channel.fetch_message(ctx.message.reference.message_id)
     else:
@@ -69,10 +69,8 @@ async def target_san(ctx, ndn_dice_string: str):
         
     sender = message.author.mention
 
-    command_list = ndn_dice_string.split()
-
     try:
-        cast = Cast.get_cast_from_ndn_string(command_list[0])
+        cast = Cast.get_cast_from_ndn_string(ndn_dice_string[0])
     except ValueError:
         await ctx.send('Bad format, should be ndn, eg: 4d6') 
 
@@ -83,8 +81,8 @@ async def target_san(ctx, ndn_dice_string: str):
         sentence = f'{ctx.author.mention}, abusing the hoot-bot (well, actually, me), make you loose {cast.get_thrown_sum()}. You know why.'
     else:
         justification = '.'
-        if len(command_list) > 1:
-            justification = ', ' + ' '.join(command_list[1:])
+        if len(ndn_dice_string) > 1:
+            justification = ', ' + ' '.join(ndn_dice_string[1:])
         sentence = f'{sender}, you loose {cast.get_thrown_sum()} ({ndn_dice_string}) points of SAN. Courtesy of {ctx.author.display_name}{justification}'
 
     await ctx.send(sentence)
