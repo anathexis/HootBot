@@ -90,6 +90,9 @@ async def target_san(ctx, ndn_dice_string: str):
         sentence = f'{ctx.author.mention}, abusing the hoot-bot (well, actually, me), make you loose {throw.result_sum} ({ndn_dice_string}) points of SAN. You know why.'
     else:
         sentence = f'{sender}, you loose {throw.result_sum} ({ndn_dice_string}) points of SAN. Courtesy of {ctx.author.display_name}.'
+    
+    if message.author == hoot_bot.user:
+        sentence = 'Nice try, but as the HootBot, the puppet master of this server, I am immune to loss of SAN'
 
     await ctx.send(sentence)
 
