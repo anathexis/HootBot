@@ -40,7 +40,7 @@ async def on_raw_reaction_add(payload: discord.RawReactionActionEvent):
         author_mention = message.author.mention
         sentence = sentence_gen.draw_sentence(message.content)
         cast = Cast.get_random_cast()
-        san_loss = f'You loose {cast.get_thrown_sum()} ({str(cast)}) points of SAN.'
+        san_loss = f'You loose {cast.throw().result_sum} ({str(cast)}) points of SAN.'
         courtesy = f'Courtesy of {adding_member}.'
 
         msg = f'{author_mention}, {sentence} {san_loss} {courtesy}'
