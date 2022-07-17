@@ -21,6 +21,18 @@ class Die():
     def roll(self) -> int:
         return randint(1, self.faces)
 
+class Throw():
+    def __init__(self, cast: 'Cast') -> None:
+        self._cast = cast
+        self.values = [cast.dice.roll() for roll in range(cast.dice_number)]
+
+    @property
+    def result_sum(self) -> int:
+        return sum(self.values)
+
+    def __str__(self) -> str:
+        return f'<Throw() from Cast({self._cast}): [{", ".join(map(str, self.values))}]>'
+
 class Cast():
     @staticmethod
     def get_cast_from_ndn_string(ndn_string: str) -> 'Cast':
@@ -39,7 +51,6 @@ class Cast():
     def __init__(self, dice_number: int, dice: Die):
         self.dice_number = dice_number
         self.dice = dice
-        self.current_throw: List[int] = []
 
     def __repr__(self) -> str:
         return f'<Cast {self.dice_number} Dice {self.dice.faces}>'
@@ -47,18 +58,16 @@ class Cast():
     def __str__(self) -> str:
         return f'{self.dice_number}{self.dice}'
 
-    def throw(self) -> List[int]:
-        self.current_throw = [self.dice.roll() for roll in range(self.dice_number)]
-        return self.current_throw
-    
-    def get_thrown_sum(self) -> int:
-        self.throw()
-        return sum(self.current_throw)
+    def throw(self) -> Throw:
+        return Throw(self)
 
     @property
     def bounds(self):
         return (self.dice_number, self.dice_number * self.dice.faces)
 
 if __name__ == '__main__':
-    cast = Cast.get_cast_from_ndn_string('carrots')
-    print(cast.get_thrown_sum())
+    cast = Cast.get_cast_from_ndn_string('4d6')
+    throw1 = cast.throw()
+    throw2 = cast.throw()
+    print(throw1)
+
