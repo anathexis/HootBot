@@ -34,7 +34,8 @@ async def on_raw_reaction_add(payload: discord.RawReactionActionEvent):
     adding_member = payload.member.display_name
     # Because HootBot not answering itself
     if message.author == hoot_bot.user:
-        return
+        await message.reply('Nice try, but as the HootBot, the puppet master of this server, I am immune to loss of SAN')
+        return 
     
     if str(payload.emoji) == '🧊':
         author_mention = message.author.mention
@@ -68,6 +69,7 @@ async def target_san(ctx, ndn_dice_string: str):
         message = await ctx.channel.fetch_message(ctx.message.reference.message_id)
     else:
         await ctx.send("No target, please reply to a message to target a loss of SAN.")
+        return
         
     sender = message.author.mention
 
@@ -77,6 +79,9 @@ async def target_san(ctx, ndn_dice_string: str):
         await ctx.send('Bad format, should be ndn, eg: 4d6') 
 
     sentence = ''
+    
+    if message.author == hoot_bot.user:
+        sentence = 'Nice try, but as the HootBot, the puppet master of this server, I am immune to loss of SAN'
 
     throw = cast.throw()
     
