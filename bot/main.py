@@ -74,6 +74,9 @@ async def divine(ctx, number_text: str = '1'):
 
     emoji_cast = random.choices(population=all_emojis, k=number)
 
+    if '\N{ICE}' in emoji_cast:
+        ctx.message.add_reaction('🧊')
+
     await ctx.send(''.join(emoji_cast))
 
 @hoot_bot.command()
