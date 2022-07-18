@@ -4,6 +4,7 @@ from sentence_generator import SentenceGenerator, TextFileSentenceGenerator
 from pathlib import Path
 import random
 from scipy.stats import logistic
+from emoji_source import all_emojis
 
 # imports of the discord libs
 import discord
@@ -62,6 +63,17 @@ async def roll(ctx, ndn_dice_string: str):
     throw = cast.throw()
 
     await ctx.send(f'Result for {ndn_dice_string}: {throw.result_sum} ({", ".join(map(str, throw.values))})')
+
+@hoot_bot.command()
+async def divine(ctx, number_text: str):
+    try:
+        number = int(number_text)
+    except ValueError:
+        await ctx.send('Bad format, should be an integer')
+
+    emoji_cast = random.choices(population=all_emojis, k=number)
+    
+    await ctx.send(''.join(emoji_cast))
 
 @hoot_bot.command()
 async def target_san(ctx, ndn_dice_string: str):
