@@ -1,4 +1,5 @@
 # imports from other modules
+from typing import Optional
 from dice_cast import Cast, Throw
 from sentence_generator import SentenceGenerator, TextFileSentenceGenerator
 from pathlib import Path
@@ -65,10 +66,7 @@ async def roll(ctx, ndn_dice_string: str):
     await ctx.send(f'Result for {ndn_dice_string}: {throw.result_sum} ({", ".join(map(str, throw.values))})')
 
 @hoot_bot.command()
-async def divine(ctx, number_text: str):
-    if number_text is None:
-        number_text = '1'
-
+async def divine(ctx, number_text: str = '1'):
     try:
         number = int(number_text)
     except ValueError:
