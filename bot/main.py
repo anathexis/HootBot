@@ -66,13 +66,16 @@ async def roll(ctx, ndn_dice_string: str):
 
 @hoot_bot.command()
 async def divine(ctx, number_text: str):
+    if number_text is None:
+        number_text = '1'
+
     try:
         number = int(number_text)
     except ValueError:
         await ctx.send('Bad format, should be an integer')
 
     emoji_cast = random.choices(population=all_emojis, k=number)
-    
+
     await ctx.send(''.join(emoji_cast))
 
 @hoot_bot.command()
