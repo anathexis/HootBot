@@ -70,7 +70,7 @@ async def on_message(message):
         await message.reply(''.join(emoji_cast))
         if '🧊' in emoji_cast:
             await message.add_reaction('🧊')
-    return 
+    await hoot_bot.process_commands(message)
 
         
 
