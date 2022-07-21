@@ -59,12 +59,12 @@ async def on_disconnect():
 @hoot_bot.event
 async def on_message(message):
     if re.match('^HootBot.*\?$', message.content) is not None:
-        number = re.search('\d+')
+        number = re.search('\d+', message.content)
         if number is not None:
             number = number.group(0)
         else: 
             number = 1
-            
+
         emoji_cast = random.choices(population=all_emojis, k=int(number))
 
         await message.channel.send(''.join(emoji_cast))
