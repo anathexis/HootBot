@@ -1,11 +1,13 @@
 # imports from other modules
 from typing import Optional
+from unicodedata import numeric
 from dice_cast import Cast, Throw
 from sentence_generator import SentenceGenerator, TextFileSentenceGenerator
 from pathlib import Path
 import random
 from scipy.stats import logistic
 from emoji_source import all_emojis
+import re
 
 # imports of the discord libs
 import discord
@@ -53,6 +55,24 @@ async def on_raw_reaction_add(payload: discord.RawReactionActionEvent):
 @hoot_bot.event
 async def on_disconnect():
     private_channel = discord.utils.get()
+
+@hoot_bot.event
+async def on_message(message):
+    if re.match('^HootBot.*\?$', message.content) is not None:
+        number = re.search('\d+')
+        if number is not None:
+            number = number.group(0)
+        else: 
+            number = 1
+            
+        emoji_cast = random.choices(population=all_emojis, k=int(number))
+
+        await message.channel.send(''.join(emoji_cast))
+        if '🧊' in emoji_cast:
+            await message.add_reaction('🧊')
+    return 
+
+        
 
 @hoot_bot.command()
 async def roll(ctx, ndn_dice_string: str):

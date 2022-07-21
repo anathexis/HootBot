@@ -1,6 +1,7 @@
 from calendar import c
 from random import seed, choice, randint
 from typing import List
+import re
 
 class Die():  
     '''Represent a die of n faces'''
