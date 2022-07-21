@@ -67,7 +67,7 @@ async def on_message(message):
 
         emoji_cast = random.choices(population=all_emojis, k=int(number))
 
-        await message.channel.send(''.join(emoji_cast))
+        await message.reply(''.join(emoji_cast))
         if '🧊' in emoji_cast:
             await message.add_reaction('🧊')
     return 
