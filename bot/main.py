@@ -74,7 +74,7 @@ async def on_message(message):
 
 
 @hoot_bot.command()
-async def all_emojis(ctx):
+async def show_emojis(ctx):
     await ctx.send(''.join(all_emojis))
 
 @hoot_bot.command()
