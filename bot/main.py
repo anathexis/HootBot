@@ -72,7 +72,10 @@ async def on_message(message):
             await message.add_reaction('🧊')
     await hoot_bot.process_commands(message)
 
-        
+
+@hoot_bot.command()
+async def show_emojis(ctx):
+    await ctx.send(''.join(all_emojis))
 
 @hoot_bot.command()
 async def roll(ctx, ndn_dice_string: str):
