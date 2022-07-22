@@ -75,7 +75,9 @@ async def on_message(message):
 
 @hoot_bot.command()
 async def show_emojis(ctx):
-    await ctx.send(''.join(all_emojis))
+    step = 100
+    for ix in range(len(0, all_emojis), step)
+        await ctx.send(''.join(all_emojis[ix, ix+step-1]))
 
 @hoot_bot.command()
 async def roll(ctx, ndn_dice_string: str):
